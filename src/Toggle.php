@@ -1,94 +1,36 @@
 <?php
 
-namespace Davidpiesse\NovaToggle;
+namespace Xamani\NovaToggle;
 
 use Laravel\Nova\Fields\Boolean;
 
 class Toggle extends Boolean
 {
+    /**
+     * The field's component.
+     *
+     * @var string
+     */
     public $component = 'nova-toggle';
 
-    public function trueLabel($label){
+    public function color($color)
+    {
         return $this->withMeta([
-            'true_label' => $label,
+            'color' => $color,
         ]);
     }
 
-    public function falseLabel($label){
+    public function onColor($on_color)
+    {
         return $this->withMeta([
-            'false_label' => $label,
+            'on_color' => $on_color,
         ]);
     }
 
-    public function showLabels(){
+    public function offColor($off_color)
+    {
         return $this->withMeta([
-            'show_true_label' => true,
-            'show_false_label' => true,
+            'off_color' => $off_color,
         ]);
     }
-
-    public function showOnlyTrueLabel(){
-        return $this->withMeta([
-            'show_true_label' => true,
-            'show_false_label' => false,
-        ]);
-    }
-
-    public function showOnlyFalseLabel(){
-        return $this->withMeta([
-            'show_true_label' => false,
-            'show_false_label' => true,
-        ]);
-    }
-
-    public function hideLabelOnIndex(){
-        return $this->withMeta([
-            'hide_label_on_index' => true,
-        ]);
-    }
-
-    public function editableIndex(){
-        return $this->withMeta([
-            'editable_index' => true,
-        ]);
-    }
-
-    public function width($width){
-        return $this->withMeta([
-            'width' => $width,
-            'height' => round($width/(60/26),0),
-        ]);
-    }
-
-    public function height($height){
-        return $this->withMeta([
-            'height' => $height,
-        ]);
-    }
-
-    public function trueColor($colour){
-        return $this->withMeta([
-            'true_color' => $colour,
-        ]);
-    }
-
-    public function falseColor($colour){
-        return $this->withMeta([
-            'false_color' => $colour,
-        ]);
-    }
-
-    //TODO
-    // public function textColor($colour){
-    //     return $this->withMeta([
-    //         'text_color' => $colour,
-    //     ]);
-    // }
-
-    public function speed($ms){
-        return $this->withMeta([
-            'speed' => $ms,
-        ]);
-    }
-
 }

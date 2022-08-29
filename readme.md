@@ -6,7 +6,7 @@ A drop in replacement for the default Boolean field
 ## Installation
 Same as most other Nova Packages
 ```
-composer require davidpiesse/nova-toggle
+composer require xamani/nova-toggle
 ```
 
 ## Usage

@@ -1,102 +1,88 @@
 <template>
-    <default-field :field="field" :errors="errors" :show-help-text="showHelpText">
-        <template slot="field">
-            <div class="py-2">
-                <toggle-button
-                    :id="sanitizedName"
-                    :name="sanitizedName"
-                    :value="value"
-                    @change="toggle"
-                    :labels="labelConfig"
-                    :dusk="sanitizedName"
-                    :width="width"
-                    :height="height"
-                    :sync="true"
-                    :color="colors"
-                    :speed="speed"
-                />
-            </div>
-
-            <p v-if="hasError" class="my-2 text-danger" v-html="firstError" />
-        </template>
-    </default-field>
+  <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText">
+    <template #field>
+        <input :id="field.name" type="checkbox"
+               :disabled="disabled()"
+               :class="custom_color(this.field.color)"
+               :style.checked="getCustomStyle()"
+               :placeholder="field.name"
+               v-model="value"
+               v-bind:true-value="1"
+               v-bind:false-value="0"
+        />
+    </template>
+  </DefaultField>
 </template>
 
 <script>
-import { Errors, FormField, HandlesValidationErrors } from 'laravel-nova'
+import {FormField, HandlesValidationErrors} from 'laravel-nova'
 
 export default {
-    mixins: [HandlesValidationErrors, FormField],
+    mixins: [FormField, HandlesValidationErrors],
 
-    data: () => ({
-        value: false,
-    }),
+    props: ['resourceName', 'resourceId', 'field'],
 
-    mounted() {
-        this.value = this.field.value || false
-
-        this.field.fill = formData => {
-            formData.append(this.field.attribute, this.trueValue)
+    data: function () {
+        return {
+            is_code: false,
         }
     },
 
     methods: {
-        toggle() {
-            this.value = !this.value
-        },
-    },
-
-    computed: {
-        trueValue() {
-            return +Boolean(this.value)
-        },
-
-        trueLabel(){
-            return (this.field.true_label != undefined) ? this.field.true_label : 'True'
-        },
-
-        falseLabel(){
-            return (this.field.false_label != undefined) ? this.field.false_label : 'False'
-        },
-
-        labelConfig(){
-            return {
-                checked:  (this.field.show_true_label) ? this.trueLabel : null,
-                unchecked: (this.field.show_false_label) ? this.falseLabel : null,
+        disabled() {
+            if (typeof this.field.extraAttributes != 'undefined') {
+                if (this.field.extraAttributes.disabled || this.field.extraAttributes.readonly) {
+                    return true;
+                }
+            } else if (this.field.disabled || this.field.readonly) {
+                return true;
+            } else {
+                return false;
             }
         },
-
-        width(){
-            return (this.field.width != undefined) ? this.field.width : 60 //50
-        },
-
-        height(){
-            return (this.field.height != undefined) ? this.field.height : 26 //22
-        },
-
-        trueColor(){
-            return (this.field.true_color != undefined) ? this.field.true_color : 'var(--success)'
-        },
-
-        falseColor(){
-            return (this.field.false_color != undefined) ? this.field.false_color : 'var(--60)'
-        },
-
-        colors(){
-            return {
-                checked: this.trueColor,
-                unchecked: this.falseColor,
-                disabled: '#CCCCCC'
+        getCustomStyle() {
+            if (this.value) {
+                if (this.is_code == true) {
+                    return "color : " + this.field.color + "; border-color :" + this.field.color
+                }
             }
+
+            return ""
+        },
+        /*
+         * Set the initial, internal value for the field.
+         */
+        setInitialValue() {
+            this.value = this.field.value || ''
         },
 
-        speed(){
-            return (this.field.speed != undefined) ? this.field.speed : 300
+        /**
+         * Fill the given FormData object with the field's internal value.
+         */
+        fill(formData) {
+            formData.append(this.field.attribute, Number(this.value) || Number(0))
         },
 
-        sanitizedName() {
-            return this.field.name.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+        /**
+         * Update the field's internal value.
+         */
+        handleChange(value) {
+            this.value = value
         },
+
+        custom_color(color) {
+            if (color.indexOf("#") === 0) {
+                this.is_code = true
+                return 'custom-color';
+            }
+            this.is_code = false;
+            return this.color;
+        }
     },
+    created: function () {
+        if (!this.field.color) {
+            this.field.color = '#21b978';
+        }
+    }
 }
 </script>

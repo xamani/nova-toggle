@@ -1,31 +1,30 @@
 <template>
-    <panel-item :field="field">
-        <p slot="value" class="text-90">
-            <span
-                class="inline-block rounded-full w-4 h-4 mr-1"
-                :class="{'bg-success': field.value, 'bg-danger': !field.value}"
-            />
-            <span v-if="label != null">{{ label }}</span>
-        </p>
-    </panel-item>
+  <PanelItem :index="index" :field="field">
+      <template #value>
+          <span id="onspan" name="onspan" class="dot_on" v-if="field.value === 1 || field.value === true" :style="trueStyles()"></span>
+          <span id="offspan" name="offspan" class="dot_off" v-else :style="falseStyles()"></span>
+      </template>
+  </PanelItem>
 </template>
 
 <script>
 export default {
     props: ['resource', 'resourceName', 'resourceId', 'field'],
-
-    computed: {
-        trueLabel(){
-            return (this.field.true_label != undefined) ? this.field.true_label : null
+    methods: {
+        trueStyles() {
+            if (typeof this.field.on_color != 'undefined') {
+                return {
+                    "background-color": this.field.on_color
+                };
+            }
         },
-
-        falseLabel(){
-            return (this.field.false_label != undefined) ? this.field.false_label : null
-        },
-
-        label() {
-            return this.field.value == true ? this.trueLabel : this.falseLabel
-        },
+        falseStyles() {
+            if (typeof this.field.off_color != 'undefined') {
+                return {
+                    "background-color": this.field.off_color
+                };
+            }
+        }
     },
 }
 </script>

@@ -1,23 +1,25 @@
 {
-    "name": "davidpiesse/nova-toggle",
-    "description": "A Boolean Toggle Switch Field",
+    "name": "xamani/nova-toggle",
+    "description": "A Laravel Nova toggle field.",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "field"
     ],
     "license": "MIT",
     "require": {
-        "php": ">=7.1.0"
+        "php": "^7.3|^8.0",
+        "laravel/nova": "~4.0"
     },
     "autoload": {
         "psr-4": {
-            "Davidpiesse\\NovaToggle\\": "src/"
+            "Xamani\\NovaToggle\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Davidpiesse\\NovaToggle\\FieldServiceProvider"
+                "Xamani\\NovaToggle\\FieldServiceProvider"
             ]
         }
     },
