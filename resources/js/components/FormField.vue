@@ -3,6 +3,7 @@
     <template #field>
         <input :id="field.name" type="checkbox"
                :disabled="disabled()"
+               :dusk="field.attribute"
                :class="custom_color(this.field.color)"
                :style.checked="getCustomStyle()"
                :placeholder="field.name"
